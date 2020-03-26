@@ -7,18 +7,18 @@ import {
 } from 'reactstrap';
 
 import {CSSTransition, TransitionGroup} from 'react-transition-group';
+import { connect } from 'react-redux';
+import { getItems } from '../actions/itemActions';
+import  PropTypes from 'prop-types';
 
 export class ShoppingList extends Component {
 
-    state = {
-        items: [
-            {id: 1, name: 'Hello'},
-            {id: 2, name: 'World'},
-            {id: 3, name: 'yeah'}
-        ]
+    componentDidMount(){
+        this.props.getItems();
     }
-
+    
     render() {
+        const { items } = this.props.item;
         return (
             <div>
                 <Container>
@@ -39,7 +39,7 @@ export class ShoppingList extends Component {
                     </Button>
                     <ListGroup>
                         <TransitionGroup className="shopping-list">
-                            {this.state.items.map(({ id, name})=>(
+                            {items.map(({ id, name})=>(
                                 <CSSTransition key={id} timeout={500} classNames="fade">
                                     <ListGroupItem>
                                         <Button className="remove-btn" color="danger" size="small"
@@ -60,6 +60,14 @@ export class ShoppingList extends Component {
         )
     }
 }
+ShoppingList.propTypes = {
+    getItems: PropTypes.func.isRequired, //its gonna be stored as prop 
+    item: PropTypes.object.isRequired
 
-export default ShoppingList
+}
+const mapStateToProps = (state)=>({
+    item: state.item  //its state.item because we named it as item in our reducer
+});
+
+export default connect(mapStateToProps, {getItems})(ShoppingList);
 
