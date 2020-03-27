@@ -10,14 +10,20 @@ const intialState = {
 
 export default (state = intialState, action)=>{
     switch(action.type){
-        case 'GET_ITEM': 
+        case GET_ITEM: 
             return {
                 ...state
             };
-        // case 'ADD_ITEM':
-        //     return state;
-        // case 'DELETE_ITEM':
-        //     return state;
+        case 'ADD_ITEM':
+            return {
+                ...state,
+                items: [action.payload, ...state.items]
+            };
+        case DELETE_ITEM:
+            return {
+                ...state,
+                items: state.items.filter(item => item.id !== action.payload)
+            };
         default:
             return state;
     }
